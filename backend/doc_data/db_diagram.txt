@@ -1,0 +1,39 @@
+# Modify this code to update the DB schema diagram.
+# To reset the sample schema, replace everything with
+# two dots ('..' - without quotes).
+
+# https://app.quickdatabasediagrams.com/#/
+
+Class
+-
+id pk int
+name varchar(255)
+students User[] FK >- User.class
+
+User
+-
+id pk int
+userName varchar(255)
+password varchar(255)
+realName varchar(255)
+subjects Subject[] FK >-< Subject.users 
+class Class
+role varchar(255)
+
+Subject
+-
+id pk int
+users User[]
+marks Mark[] FK -< Mark.subject
+icon varchar(255)
+name varchar(255)
+
+Mark
+-
+id pk int
+subject Subject
+studentUserId int
+teacherUserId int
+date Date
+mark int
+description varchar(255)

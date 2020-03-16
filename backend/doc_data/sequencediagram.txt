@@ -1,0 +1,16 @@
+https://sequencediagram.org/
+
+
+
+
+title Bejelentkezés szekvenciadiagramja
+
+Kliens->Auth Controller: Elküldi a felhasználót egy\ncsomagként
+Auth Controller->User Repository: Elküldi a felhasználónevet
+User Repository->Auth Controller: Visszaküldi a felhasználót\naz adatbázisból\n(Ha létezik)
+
+note over Auth Controller: Megnézi, hogy jó-e\na megadott jelszó.
+Auth Controller->Session Manager: Ha jó a jelszó,letárolja a felhasználót\na session manager-ben
+
+
+Auth Controller->Kliens: 200, ha létezik a fel-\nhasználó, és jó a jelszó\n\n403 különben

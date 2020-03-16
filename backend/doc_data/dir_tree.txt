@@ -1,0 +1,58 @@
+Folder PATH listing for volume OS
+Volume serial number is D2D0-3B0A
+C:.
++---.idea
+|   \---libraries
++---.mvn
+|   \---wrapper
++---src
+|   +---main
+|   |   +---java
+|   |   |   \---hu
+|   |   |       \---elte
+|   |   |           \---alkfejl
+|   |   |               \---enaplo
+|   |   |                   +---annotation
+|   |   |                   +---component
+|   |   |                   +---configuration
+|   |   |                   +---controller
+|   |   |                   +---interceptor
+|   |   |                   +---model
+|   |   |                   +---repository
+|   |   |                   \---service
+|   |   \---resources
+|   \---test
+|       \---java
+|           \---hu
+|               \---elte
+|                   \---alkfejl
+|                       \---enaplo
+\---target
+    +---classes
+    |   \---hu
+    |       \---elte
+    |           \---alkfejl
+    |               \---enaplo
+    |                   +---annotation
+    |                   +---component
+    |                   +---configuration
+    |                   +---controller
+    |                   +---interceptor
+    |                   +---model
+    |                   +---repository
+    |                   \---service
+    +---generated-sources
+    |   \---annotations
+    +---generated-test-sources
+    |   \---test-annotations
+    +---maven-status
+    |   \---maven-compiler-plugin
+    |       +---compile
+    |       |   \---default-compile
+    |       \---testCompile
+    |           \---default-testCompile
+    \---test-classes
+        \---hu
+            \---elte
+                \---alkfejl
+                    \---enaplo

@@ -1,0 +1,17 @@
+.icon-block {
+    padding: 0 15px;
+}
+
+.icon-block .material-icons {
+    font-size: inherit;
+    color: #fff;
+}
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+.card {
+    padding: 10%;
+}

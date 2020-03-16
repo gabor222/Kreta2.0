@@ -1,0 +1,41 @@
+  <div id="login-container" class="full-height row white-text center">
+    <div class="login-panel col s12 m6 push-m3 red darken-4 z-depth-4">
+      <h4></h4>
+      <div *ngIf="this.from && !this.error" class="container center">
+        <div class="card-panel red lighten-1" role="alert">
+          Error 405!
+        </div>
+      </div>
+      <div *ngIf="this.error" class="container center">
+        <div class="card-panel red lighten-1" role="alert">
+          Helytelen bejelentkezési adatok!
+        </div>
+      </div>
+      <div *ngIf="this.buttonPressed && (!username.value || !password.value)" class="container center">
+        <div class="card-panel red lighten-1" role="alert">
+          Hiányzó adat!
+        </div>
+      </div>
+      <h3>Tiszaalpári szakgimnázium</h3>
+      <p>&#8203;</p>
+      <div class="login-fields container center">
+        <div class="input-field input_div">
+          <input #username type="text" [ngClass]="error ? 'invalid' : ''" id="username" name="username" id="username" type="text" class="validate" required>
+          <label for="username" class="active ">Felhasználónév</label>
+        </div>
+        <div class="input-field input_div">
+          <input #password type="password" [ngClass]="error ? 'invalid' : ''" id="password" name="password" id="password" type="password" class="validate" required>
+          <label for="password" class="active ">Jelszó</label>
+        </div>
+      </div>
+      <p>&#8203;</p>
+      <div class="center card-action">
+        <button type="button" value="Login" class="btn yellow darken-3 waves-effect waves-light" (click)="login(username.value, password.value)">Bejelentkezés</button>
+      </div>
+      <div class="login-footer">
+        <hr>
+        <a class="center" href="assets/dok.txt">dokumentáció</a>
+        <p>&#8203;</p>
+      </div>
+    </div>
+  </div>

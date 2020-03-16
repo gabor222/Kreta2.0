@@ -1,0 +1,1 @@
+tree /A > dir_tree.txt
