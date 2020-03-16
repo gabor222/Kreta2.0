@@ -22,16 +22,15 @@ const routes: Routes = [
     canActivateChild: [RoutingGuardService],
     children: [
       { path: '', component: StartPageViewComponent },
-
       { path: 'login', component: LoginViewComponent },
+      { path: 'profile', component: ProfileViewComponent, data: { roles: ['ROLE_STUDENT', 'ROLE_TEACHER', 'ROLE_ADMIN'] } },
 
       // Diákok oldalai
       { path: 'student/subjects', component: StudentSubjectListViewComponent, data: { roles: ['ROLE_STUDENT'] } },
       { path: 'student/subjects/:id', component: StudentSubjectItemViewComponent, data: { roles: ['ROLE_STUDENT'] } },
-      { path: 'student/profile', component: StudentProfileViewComponent, data: { roles: ['ROLE_STUDENT'] } },
 
       // Admin oldalak
-      { path: 'admin-panel', component: AdminStartPageViewComponent  },
+      { path: 'admin-panel', component: AdminStartPageViewComponent, data: { roles: ['ROLE_ADMIN'] } },
       
 
       // Kijelentkezést követő oldal

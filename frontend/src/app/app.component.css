@@ -1,0 +1,8 @@
+#sidenav-title {
+    background: url("/assets/static/images/sidenav-header.jpg");
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 170px;
+}

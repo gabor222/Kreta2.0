@@ -1,1 +1,78 @@
+<mz-navbar *ngIf="loggedIn()" navbarClass="indigo darken-3">
+  <!-- Mobil eszközökön megjelenő hamburgermenü -->
+  <mz-navbar-item-container class="hide-on-med-and-up">
+    <mz-navbar-item id="open-sidenav">
+      <a><i class="material-icons">menu</i></a>
+    </mz-navbar-item>
+  </mz-navbar-item-container>
+  
+  <mz-navbar-item-container class="hide-on-small-only">
+    <mz-navbar-item [active]="router.isActive('/profile')">
+      <a routerLink="profile"><i class="material-icons left">person</i> Profil</a>
+    </mz-navbar-item>
+  </mz-navbar-item-container>
+  
+  <!-- Diák menü -->
+  <mz-navbar-item-container *ngIf="isStudent()" class="hide-on-small-only">
+    <mz-navbar-item [active]="router.isActive('/student/subjects')">
+      <a routerLink="student/subjects"><i class="material-icons left">format_list_bulleted</i> Tantárgyak</a>
+    </mz-navbar-item>
+  </mz-navbar-item-container>
+
+  <!-- Tanár menü -->
+  <mz-navbar-item-container *ngIf="isTeacher()" class="hide-on-small-only">
+    
+  </mz-navbar-item-container>
+
+  <!-- Admin menü -->
+  <mz-navbar-item-container *ngIf="isAdmin()" class="hide-on-small-only">
+    
+  </mz-navbar-item-container>
+  
+  <!-- Kijelentkezés -->
+  <mz-navbar-item-container class="hide-on-small-only" [align]="'right'">
+    <mz-navbar-item id="open-sidenav">
+      <a><button (click)="logout()" class="btn blue darken-3 waves-effect waves-light">Kijelentkezés <i class="material-icons right">directions_walk</i></button></a>
+    </mz-navbar-item>
+  </mz-navbar-item-container>
+</mz-navbar>
+
+<!-- Oldalsó navigáció -->
+<mz-sidenav *ngIf="loggedIn()" [id]="'sidenav'" [collapseButtonId]="'open-sidenav'">
+  <mz-sidenav-header>
+    <div id="sidenav-title" class="center">
+      &#8203;
+    </div>
+    <p class="center">Belépve, mint {{ getUserRealName() }}</p>
+  </mz-sidenav-header>
+
+  <mz-sidenav-divider></mz-sidenav-divider>
+
+  <mz-sidenav-link [active]="router.isActive('/profile')">
+    <a routerLink="profile"><i class="material-icons left">person</i> Profil</a>
+  </mz-sidenav-link>
+
+  <!-- Diák menü -->
+  <div *ngIf="isStudent()">
+    <mz-sidenav-link [active]="router.isActive('/student/subjects')">
+      <a routerLink="student/subjects"><i class="material-icons left">format_list_bulleted</i> Tantárgyak</a>
+    </mz-sidenav-link>
+  </div>
+  <!-- Tanár menü -->
+  <div *ngIf="isTeacher()">
+    
+  </div>
+
+  <!-- Admin menü -->
+  <div *ngIf="isAdmin()">
+    
+  </div>
+
+  <mz-sidenav-divider></mz-sidenav-divider>
+
+  <mz-sidenav-link class="center">
+    <button (click)="logout()" class="btn blue darken-3 waves-effect waves-light">Kijelentkezés <i class="material-icons right">directions_walk</i></button>
+  </mz-sidenav-link>
+</mz-sidenav>
+
 <router-outlet></router-outlet>

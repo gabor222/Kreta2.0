@@ -1,0 +1,14 @@
+#logged-out-wrapper {
+    /*background: url('/assets/static/images/logged-out-bg.jpg');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;*/
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#logged-out-inner {
+    width: 100%;
+}

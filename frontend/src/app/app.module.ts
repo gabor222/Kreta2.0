@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RoutingModule } from './routing/routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { LoginViewComponent } from './components/login-view/login-view.component';
@@ -15,6 +16,8 @@ import { TeacherMainViewComponent } from './components/teacher-main-view/teacher
 import { AdminRegisterUserViewComponent } from './components/admin-register-user-view/admin-register-user-view.component';
 import { AdminStartPageViewComponent } from './components/admin-start-page-view/admin-start-page-view.component';
 import { StartPageViewComponent } from './components/start-page-view/start-page-view.component';
+
+import { MzNavbarModule, MzCollapsibleModule, MzSidenavModule, MzBadgeModule } from 'ngx-materialize';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,15 @@ import { StartPageViewComponent } from './components/start-page-view/start-page-
     BrowserModule,
     RoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+
+    // Materialize
+    MzNavbarModule,
+    MzSidenavModule,
+    MzCollapsibleModule,
+    MzBadgeModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -46,19 +48,17 @@ public class UserController {
         Optional<UserModel> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             UserModel user = optionalUser.get();
-            Iterable<SubjectModel> subjects = user.getSubjects();
+            List<SubjectModel> subjects = user.getSubjects();
+            // Le kell szűkíteni minden tárgyhoz a jegyeket az adott diákra
+            // Kicsit félmegoldás, de működik
+            subjects.stream().forEach(s ->
+                s.setMarks(
+                    s.getMarks().stream().filter(m ->
+                        m.getStudentUserId() == userId
+                    ).collect(Collectors.toList())
+                )
+            );
             return ResponseEntity.ok(subjects);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/{userId}/subject/{subjectId}/marks")
-    public ResponseEntity getMarks(@PathVariable Integer userId, @PathVariable Integer subjectId) {
-        Optional<UserModel> optionalUser = userRepository.findById(userId);
-        Optional<SubjectModel> optionalSubject = subjectRepository.findById(subjectId);
-        if (optionalUser.isPresent() && optionalSubject.isPresent()) {
-            SubjectModel subject = optionalSubject.get();
-            return ResponseEntity.ok( subject.getMarks().stream().filter(m -> m.getStudentUserId() == userId));
         }
         return ResponseEntity.notFound().build();
     }

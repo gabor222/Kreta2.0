@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { User } from '../models/user';
+import { Subject } from '../models/subject';
+import { Mark } from '../models/mark';
 
 @Injectable()
 export class UserService {
@@ -27,5 +29,9 @@ export class UserService {
 
   public registerUser(user: User): Observable<User> {
     return this.http.post(UserService.api + '/', user) as Observable<User>;
+  }
+
+  public getSubjectsByUser(id: number): Observable<Subject[]> {
+    return this.http.get(UserService.api + '/' + id + '/subjects') as Observable<Subject[]>;
   }
 }

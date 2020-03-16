@@ -28,5 +28,22 @@ export class AppComponent implements OnInit {
   private loggedIn(): boolean {
     return this.authService.getUser() !== undefined;
   }
+
+  private getUserRealName(): String {
+    return this.authService.getUser().realName;
+  }
+
+  private isStudent(): boolean {
+    return this.authService.getUser().role === 'ROLE_STUDENT';
+  }
+
+  private isTeacher(): boolean {
+    return this.authService.getUser().role === 'ROLE_TEACHER';
+  }
+
+  private isAdmin(): boolean {
+    return this.authService.getUser().role === 'ROLE_ADMIN';
+  }
+
   public title: string = 'e-Napló';
 }

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -26,6 +27,16 @@ public class UserModel {
     private String password;
 
     private String realName;
+
+    private Date birthDate;
+
+    private String email;
+
+    private String nationality;
+
+    private boolean male;
+
+    private String avatar;
 
     @ManyToMany
     @JsonIgnore

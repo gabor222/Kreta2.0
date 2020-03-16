@@ -22,7 +22,7 @@ export class RoutingGuardService implements CanActivate, CanActivateChild {
       if (route.data.roles.includes(user.role)) {
         return true;
       } else { // ha be van jelentkezve a felhasználó, a saját kezdőoldalára kell irányítani
-        this.navigateToRoleStartPage(user);
+        this.router.navigate(['']);
         return true;
       }
     }
@@ -35,27 +35,5 @@ export class RoutingGuardService implements CanActivate, CanActivateChild {
 
   public canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     return this.canActivate(route, state);
-  }
-
-  private navigateToRoleStartPage(user: User): void {
-    if (user !== undefined) {
-      let role = user.role;
-      switch (role) { // alapértelmezett kezdőoldalak a különböző szerepköröknek
-        case 'ROLE_STUDENT': {
-          this.router.navigate(['/student/subjects']);
-          break;
-        }
-        case 'ROLE_TEACHER': {
-          this.router.navigate(['/student/subjects']);
-          break;
-        }
-        case 'ROLE_ADMIN': {
-          this.router.navigate(['/admin-panel']);
-          break;
-        }
-      }
-    } else { // ha nincs bejelentkezve
-      this.router.navigate(['/login']);
-    }
   }
 }

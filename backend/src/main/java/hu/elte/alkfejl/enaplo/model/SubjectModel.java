@@ -25,7 +25,7 @@ public class SubjectModel {
     private List<UserModel> users;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
-    @JsonIgnore
+    //@JsonIgnore
     private List<MarkModel> marks;
 
     private String icon;
