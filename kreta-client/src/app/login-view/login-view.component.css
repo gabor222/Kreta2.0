@@ -1,0 +1,47 @@
+::ng-deep html,
+::ng-deep body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden; 
+}
+
+::ng-deep html {
+  background: url("/assets/static/images/login-bg.png");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.input-field input:focus + label {
+  color: #fff !important;
+}
+
+.row .input-field input:focus {
+  border-bottom: 1px solid #fff !important;
+  box-shadow: 0 1px 0 0 #fff !important
+}
+
+.input-field .prefix.active {
+  color: #fff !important;
+}
+
+.full-height { height: 100%; }
+
+.login-panel {
+  position: relative;
+  height: 100%;
+}
+
+label,input { color: #fff; }
+
+.login-footer {
+  position: absolute;
+  bottom: 0;
+  margin: -0.75rem;
+  width: 100%;
+}
+
+hr { max-width: 75%; }
+
+.icon-block .material-icons { font-size: inherit; }
