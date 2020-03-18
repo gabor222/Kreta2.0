@@ -4,6 +4,7 @@ import { RoutingModule } from './routing/routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { LoginViewComponent } from './components/login-view/login-view.component';
@@ -16,8 +17,10 @@ import { TeacherMainViewComponent } from './components/teacher-main-view/teacher
 import { AdminRegisterUserViewComponent } from './components/admin-register-user-view/admin-register-user-view.component';
 import { AdminStartPageViewComponent } from './components/admin-start-page-view/admin-start-page-view.component';
 import { StartPageViewComponent } from './components/start-page-view/start-page-view.component';
+import { AdminRegisterSuccessComponent } from './components/admin-register-success/admin-register-success.component';
 
-import { MzNavbarModule, MzCollapsibleModule, MzSidenavModule, MzBadgeModule } from 'ngx-materialize';
+import { MaterializeModule } from 'ngx-materialize';
+import { AdminAddClassViewComponent } from './components/admin-add-class-view/admin-add-class-view.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,9 @@ import { MzNavbarModule, MzCollapsibleModule, MzSidenavModule, MzBadgeModule } f
     TeacherMainViewComponent,
     AdminRegisterUserViewComponent,
     AdminStartPageViewComponent,
-    StartPageViewComponent
+    StartPageViewComponent,
+    AdminRegisterSuccessComponent,
+    AdminAddClassViewComponent
   ],
   imports: [
     BrowserModule,
@@ -39,13 +44,10 @@ import { MzNavbarModule, MzCollapsibleModule, MzSidenavModule, MzBadgeModule } f
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
-
-    // Materialize
-    MzNavbarModule,
-    MzSidenavModule,
-    MzCollapsibleModule,
-    MzBadgeModule
+    ReactiveFormsModule,
     
+    // Materialize
+    MaterializeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

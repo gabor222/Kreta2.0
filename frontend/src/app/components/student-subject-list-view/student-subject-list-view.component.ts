@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
-import { User } from '../../models/user'
-import { Subject } from '../../models/subject'
-import { Mark } from '../../models/mark'
+import { User } from '../../models/user';
+import { Subject } from '../../models/subject';
+import { Mark } from '../../models/mark';
 
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';

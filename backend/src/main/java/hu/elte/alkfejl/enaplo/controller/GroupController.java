@@ -24,6 +24,12 @@ public class GroupController {
         return ResponseEntity.ok(group);
     }
 
+    @PostMapping("")
+    public ResponseEntity<ClassModel> post(@RequestBody ClassModel group) {
+        ClassModel saved = groupRepository.save(group);
+        return ResponseEntity.ok(saved);
+    }
+
     @GetMapping("/{groupId}")
     public ResponseEntity findById(@PathVariable Integer groupId) {
         Optional<ClassModel> optionalGroup = groupRepository.findById(groupId);

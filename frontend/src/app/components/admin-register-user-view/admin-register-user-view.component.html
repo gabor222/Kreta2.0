@@ -1,3 +1,145 @@
-<p>
-  admin-register-user-view works!
-</p>
+<div class="container">
+  <h3 class="center">Felhasználó regisztrálása</h3>
+  <br>
+  <form [formGroup]="registerUserForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="section">
+      <h4>Személyes adatok</h4>
+
+      <!-- Név -->
+      <div class="row">
+        <mz-input-container class="col s12 m6">
+          <input mz-input mz-validation required
+            id="input-realname"
+            formControlName="realName"
+            type="text"
+            [errorMessageResource]="errorMessageResources.realName"
+            [label]="'Teljes név'" />
+        </mz-input-container>
+
+        <!-- Születési dátum -->
+        <mz-datepicker-container class="col s12 m6">
+          <input mz-datepicker mz-validation required
+            id="datepicker-birthdate"
+            formControlName="birthDate"
+            type="text"
+            [errorMessageResource]="errorMessageResources.birthDate"
+            [options]="birthdayDatepickerOptions" 
+            [label]="'Születési dátum'" />
+        </mz-datepicker-container>
+      </div>
+
+      <!-- Nem -->
+      <div class="row">
+        <mz-radio-button-container class="col s12 m3">
+          <input mz-radio-button
+            id="radio-button-man"
+            formControlName="gender"
+            name="gender"
+            type="radio"
+            value="Férfi"
+            [label]="'Férfi'"
+            [withGap]="true"
+          >
+        </mz-radio-button-container>
+        <mz-radio-button-container class="col s12 m3">
+          <input mz-radio-button
+            id="radio-button-woman"
+            formControlName="gender"
+            name="gender"
+            type="radio"
+            value="Nő"
+            [label]="'Nő'"
+            [withGap]="true">
+        </mz-radio-button-container>
+      </div>
+
+      <br>
+
+      <!-- Állampolgárság -->
+      <div class="row">
+        <mz-input-container class="col s12 m6">
+          <input mz-input mz-validation required
+            id="input-nationality"
+            formControlName="nationality"
+            type="text"
+            [errorMessageResource]="errorMessageResources.nationality"
+            [label]="'Állampolgárság'" />
+        </mz-input-container>
+
+        <mz-input-container class="col s12 m6">
+          <input mz-input mz-validation required
+            id="input-email"
+            formControlName="email"
+            type="email"
+            [errorMessageResource]="errorMessageResources.email"
+            [label]="'E-mail'" />
+        </mz-input-container>
+      </div>
+    </div>
+
+    <div class="section">
+        <h4>Felhasználói fiók adatai</h4>
+
+        <div class="row">
+          <!-- Felhasználónév -->
+          <mz-input-container class="col s12 m6">
+            <input mz-input mz-validation required
+              id="input-username"
+              formControlName="userName"
+              type="text"
+              [errorMessageResource]="errorMessageResources.userName"
+              [label]="'Felhasználónév'" />
+          </mz-input-container>
+
+          <!-- Jelszó -->
+          <mz-input-container class="col s12 m6">
+            <input mz-input mz-validation required
+              id="input-password"
+              formControlName="password"
+              type="password"
+              [errorMessageResource]="errorMessageResources.password"
+              [label]="'Jelszó'" />
+          </mz-input-container>
+        </div>
+
+        <div class="row">
+          <!-- Csoport -->
+          <mz-select-container class="col s12 m6">
+            <select mz-select mz-validation required
+              id="group"
+              [label]="'Csoport'"
+              formControlName="group"
+              [errorMessageResource]="errorMessageResources.group"
+              [placeholder]="'Válasszon csoportot!'"
+            >
+              <option *ngFor="let group of groups; let i = index">{{ group.name }}</option>
+            </select>
+          </mz-select-container>
+
+          <!-- Szerepkör -->
+          <mz-select-container class="col s12 m6">
+            <select mz-select mz-validation required
+              id="role"
+              [label]="'Szerepkör'"
+              formControlName="role"
+              [errorMessageResource]="errorMessageResources.role"
+              [placeholder]="'Válasszon szerepkört!'"
+            >
+              <option value="ROLE_ADMIN">Adminisztrátor</option>
+              <option value="ROLE_STUDENT">Diák</option>
+              <option value="ROLE_TEACHER">Tanár</option>
+            </select>
+          </mz-select-container>
+        </div>
+    </div>
+
+    <div class="center">
+      <button mz-button [disabled]="!registerUserForm.valid" type="submit">Regisztrálás</button>
+      &#8203;
+      <button mz-button (click)="clear()" type="button">Alaphelyzet</button>
+    </div>
+
+    <br>
+
+  </form>
+</div>

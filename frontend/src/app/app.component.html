@@ -26,12 +26,17 @@
 
   <!-- Admin menü -->
   <mz-navbar-item-container *ngIf="isAdmin()" class="hide-on-small-only">
-    
+    <mz-navbar-item [active]="router.isActive('admin-panel')">
+      <a routerLink="admin-panel"><i class="material-icons left">build</i> Admin panel</a>
+    </mz-navbar-item>
+    <mz-navbar-item [active]="router.isActive('/admin/register-user')">
+      <a routerLink="admin/register-user"><i class="material-icons left">person_add</i> Felhasználó regisztrálása</a>
+    </mz-navbar-item>
   </mz-navbar-item-container>
   
   <!-- Kijelentkezés -->
   <mz-navbar-item-container class="hide-on-small-only" [align]="'right'">
-    <mz-navbar-item id="open-sidenav">
+    <mz-navbar-item>
       <a><button (click)="logout()" class="btn blue darken-3 waves-effect waves-light">Kijelentkezés <i class="material-icons right">directions_walk</i></button></a>
     </mz-navbar-item>
   </mz-navbar-item-container>
@@ -58,6 +63,7 @@
       <a routerLink="student/subjects"><i class="material-icons left">format_list_bulleted</i> Tantárgyak</a>
     </mz-sidenav-link>
   </div>
+
   <!-- Tanár menü -->
   <div *ngIf="isTeacher()">
     
@@ -65,7 +71,9 @@
 
   <!-- Admin menü -->
   <div *ngIf="isAdmin()">
-    
+    <mz-sidenav-link [active]="router.isActive('/admin/register-user')">
+      <a routerLink="admin/register-user"><i class="material-icons left">person_add</i> Felhasználó regisztrálása</a>
+    </mz-sidenav-link>
   </div>
 
   <mz-sidenav-divider></mz-sidenav-divider>

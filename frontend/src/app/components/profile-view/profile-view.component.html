@@ -1,7 +1,7 @@
   <div class="container center">
       <br>
       <div class="container">
-        <img class="responsive-img" src="/assets/static/images/avatars/boy.png">
+        <img class="responsive-img" src="/assets/static/images/avatars/{{ user.avatar }}">
       </div>
       <h3 class="header">{{ user.realName }}</h3>
       <h5 class="header">{{ user.classModel.name }}</h5>
@@ -11,7 +11,7 @@
       <br>
 
       <h5>Neme:</h5>
-      <h6>{{ user.male ? 'Férfi' : 'Nő' }}</h6>
+      <h6>{{ user.gender }}</h6>
       <br>
 
       <h5>Állampolgársága:</h5>

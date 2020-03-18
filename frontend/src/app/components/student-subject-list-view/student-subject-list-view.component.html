@@ -4,17 +4,10 @@
     <br>
     <!-- Jelezzük az adatok betöltését -->
     <div *ngIf="!subjects" class="center">
-      <div class="preloader-wrapper big active">
-        <div class="spinner-layer spinner-blue-only">
-          <div class="circle-clipper left">
-            <div class="circle"></div>
-          </div><div class="gap-patch">
-            <div class="circle"></div>
-          </div><div class="circle-clipper right">
-            <div class="circle"></div>
-          </div>
-        </div>
-      </div>
+      <mz-spinner
+        [color]="'blue'"
+        [size]="'big'">
+      </mz-spinner>
     </div>
     <mz-collapsible *ngIf="subjects">
       <mz-collapsible-item *ngFor="let subject of subjects; let i = index">
@@ -29,7 +22,7 @@
               <tr>
                 <th>Jegy</th>
                 <th>Oktató</th>
-                <th>Idő</th>
+                <th>Dátum</th>
                 <th>Leírás</th>
               </tr>
             </thead>
@@ -37,7 +30,7 @@
               <tr *ngFor="let mark of subject.marks; let j = index">
                 <td>{{ mark.mark }} </td>
                 <td>{{ getUserName(mark.teacherUserId) }}</td>
-                <td>{{ transformTimestamp(mark.timestamp) }}</td>
+                <td>{{ mark.date | date:'yyyy/MM/dd' }}</td>
                 <td>{{ mark.description }}</td>
               </tr>
             </tbody>

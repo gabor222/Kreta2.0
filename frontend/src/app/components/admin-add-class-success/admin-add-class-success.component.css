@@ -1,0 +1,9 @@
+#add-class-success-wrapper {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#add-class-success-inner {
+    width: 100%;
+}

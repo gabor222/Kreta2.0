@@ -23,6 +23,10 @@ export class UserService {
     return this.http.get(UserService.api + '/' + id) as Observable<User>;
   }
 
+  public getUserByUserName(username: string): Observable<User> {
+    return this.http.get(UserService.api + '/' + username) as Observable<User>;
+  }
+
   public delUserById(id: number): Observable<any> {
     return this.http.delete(UserService.api + '/' + id);
   }
