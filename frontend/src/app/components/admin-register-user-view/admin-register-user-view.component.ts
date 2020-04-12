@@ -1,6 +1,7 @@
 import { Component, OnInit, Renderer } from '@angular/core';
 import { ValidatorFn, AbstractControl, FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Pickadate } from 'pickadate/builds';
 
 import { Observable } from 'rxjs';
 import { of } from 'rxjs';
@@ -158,12 +159,12 @@ export class AdminRegisterUserViewComponent implements OnInit {
     } else {
       this.user.avatar = womanAvatars[Math.floor(Math.random() * womanAvatars.length)];
     }
-    
+
     // A tényleges regisztráció kérése a backend-től
     this.userService.registerUser(this.user).subscribe((user) => {
         //console.log('Regisztrálva');
-        this.clear(); 
-        this.router.navigate(['/admin/register-user/success']); 
+        this.clear();
+        this.router.navigate(['/admin/register-user/success']);
       }, (err) => {
         this.registrationError = true;
       }
@@ -175,7 +176,7 @@ export class AdminRegisterUserViewComponent implements OnInit {
 
       // Személyes adatok
       realName: [
-        this.user.realName, 
+        this.user.realName,
         Validators.compose([
           Validators.required,
           Validators.minLength(2),
@@ -199,7 +200,7 @@ export class AdminRegisterUserViewComponent implements OnInit {
 
       // Felhasználói fiók adatai
       userName: [
-        this.user.userName, 
+        this.user.userName,
         Validators.compose([
           Validators.required,
           this.checkUserNameExists(),
@@ -239,7 +240,7 @@ export class AdminRegisterUserViewComponent implements OnInit {
     closeOnSelect: false,
     editable: false,
     max: new Date('2011-12-31'), // valami hihető dátum egy diáknak
-    selectMonths: true, 
+    selectMonths: true,
     selectYears: 18,
   };
 

@@ -17,7 +17,7 @@ import { TeacherMainViewComponent } from './components/teacher-main-view/teacher
 import { AdminRegisterUserViewComponent } from './components/admin-register-user-view/admin-register-user-view.component';
 import { AdminStartPageViewComponent } from './components/admin-start-page-view/admin-start-page-view.component';
 import { StartPageViewComponent } from './components/start-page-view/start-page-view.component';
-import { AdminRegisterSuccessComponent } from './components/admin-register-success/admin-register-success.component';
+//import { AdminRegisterSuccessComponent } from './components/admin-register-success/admin-register-success.component';
 
 import { MaterializeModule } from 'ngx-materialize';
 import { AdminAddClassViewComponent } from './components/admin-add-class-view/admin-add-class-view.component';
@@ -35,7 +35,7 @@ import { AdminAddClassViewComponent } from './components/admin-add-class-view/ad
     AdminRegisterUserViewComponent,
     AdminStartPageViewComponent,
     StartPageViewComponent,
-    AdminRegisterSuccessComponent,
+    //AdminRegisterSuccessComponent,
     AdminAddClassViewComponent
   ],
   imports: [
@@ -45,7 +45,7 @@ import { AdminAddClassViewComponent } from './components/admin-add-class-view/ad
     FormsModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    
+
     // Materialize
     MaterializeModule
   ],

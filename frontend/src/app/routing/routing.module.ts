@@ -11,7 +11,7 @@ import { TeacherMainViewComponent } from '../components/teacher-main-view/teache
 import { AdminStartPageViewComponent } from '../components/admin-start-page-view/admin-start-page-view.component';
 import { StartPageViewComponent } from '../components/start-page-view/start-page-view.component';
 import { AdminRegisterUserViewComponent } from '../components/admin-register-user-view/admin-register-user-view.component';
-import { AdminRegisterSuccessComponent } from '../components/admin-register-success/admin-register-success.component';
+//import { AdminRegisterSuccessComponent } from '../components/admin-register-success/admin-register-success.component';
 
 // Authorizáció
 import { RoutingGuardService } from '../services/routing-guard.service';
@@ -20,8 +20,8 @@ import { AdminAddClassViewComponent } from '../components/admin-add-class-view/a
 
 // Útvonalak
 const routes: Routes = [
-  { 
-    path: '', 
+  {
+    path: '',
     canActivateChild: [RoutingGuardService],
     children: [
       { path: '', component: StartPageViewComponent },
@@ -36,8 +36,8 @@ const routes: Routes = [
       { path: 'admin-panel', component: AdminStartPageViewComponent, data: { roles: ['ROLE_ADMIN'] } },
       { path: 'admin/register-user', component: AdminRegisterUserViewComponent, data: { roles: ['ROLE_ADMIN'] } },
       { path: 'admin/add-class', component: AdminAddClassViewComponent, data: { roles: ['ROLE_ADMIN'] } },
-      { path: 'admin/register-user/success', component: AdminRegisterSuccessComponent },
-      
+      //{ path: 'admin/register-user/success', component: AdminRegisterSuccessComponent },
+
       // Kijelentkezést követő oldal
       { path: 'logged-out', component: LoggedOutViewComponent }
     ]
