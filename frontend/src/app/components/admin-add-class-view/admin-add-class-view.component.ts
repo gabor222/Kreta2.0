@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Group } from 'src/app/models/group';
-import { GroupService } from 'src/app/services/group.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { Group } from '@app/models/group';
+import { GroupService } from '@app/services/group.service';
 
 @Component({
   selector: 'app-admin-add-class-view',
@@ -10,50 +12,43 @@ import { GroupService } from 'src/app/services/group.service';
   providers: [GroupService]
 })
 export class AdminAddClassViewComponent implements OnInit {
-  addClassForm: FormGroup;
-  group: Group = {
-    id: -1,
+  form: FormGroup;
+  loading = false;
+  submitted = false;
+
+  classname: string;
+  group: any = {
     name: '',
   };
 
-  errorMessageResources = {
-    name: {
-      required: 'A név megadása kötelező.',
-    },
-  };
-
   constructor(
-    private formBuilder: FormBuilder,
-    private groupService: GroupService) {  }
-
-  ngOnInit() {
-    this.buildForm()
+    private groupService: GroupService,
+    private router: Router,
+  ) {
+    this.form = new FormGroup({
+      'classname': new FormControl(this.classname, [Validators.required]),
+    });
   }
 
-  onSubmit() {
-    if (!this.addClassForm.valid) {
-      return;
-    }
+  ngOnInit() { }
 
-    this.group = Object.assign({}, this.addClassForm.value);
+  get fc() { return this.form.controls; }
 
-    this.groupService.addGroup(this.group).subscribe((group) => {
-      console.log('Regisztrálva');
-    }, (err) => {
+  async onSubmit() {
+    this.submitted = true;
+    if (!this.form.valid) return;
+    this.loading = true;
 
-    }
-  );
-  }
+    this.group.name = this.fc.classname.value;
 
-  buildForm() {
-    this.addClassForm = this.formBuilder.group({
-      name: [
-        this.group.name, 
-        Validators.compose([
-          Validators.required,
-        ]),
-      ],
-    })
+    this.groupService.addGroup(this.group).then(
+      (group) => {
+        this.router.navigate(['/admin/add-class/success']);
+      },
+      (err) => {
+        this.loading = false;
+      }
+    );
   }
 
 }

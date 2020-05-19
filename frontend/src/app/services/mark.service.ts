@@ -1,25 +1,24 @@
+// Angular
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
-import { Subject } from '../models/subject';
-import { Group } from '../models/group';
-import { User } from '../models/user';
-import { Mark } from '../models/mark';
+// App
+import { Mark } from '@app/models/mark';
+import { HttpService } from '@app/services/http.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MarkService {
-  private static api: string = 'http://localhost:8080/api/marks';
-  private handleError;
-  
-  constructor(
-    private http: HttpClient
-  ) { }
+  private baseUrl = 'http://localhost:8080/api/marks';
 
-  public addMark(mark: Mark): Observable<Mark> {
-    return this.http.post(MarkService.api + '/', mark) as Observable<Mark>;
+  constructor(private httpService: HttpService) { }
+
+  public addMark(mark: Mark): Promise<Mark> {
+    try {
+      return this.httpService.post(`${this.baseUrl}`, mark);
+    } catch (e) {
+      console.log('[addMark] ' + e);
+    }
   }
 
-
-  // További funkciók
 }

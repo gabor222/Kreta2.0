@@ -1,7 +1,6 @@
-import { Component, OnInit, Renderer } from '@angular/core';
-import { ValidatorFn, AbstractControl, FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, Renderer2, AfterContentInit } from '@angular/core';
+import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Pickadate } from 'pickadate/builds';
 
 import { Observable } from 'rxjs';
 import { of } from 'rxjs';
@@ -13,19 +12,22 @@ import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { GroupService } from '../../services/group.service';
 
+declare var M: any;
+
 @Component({
   selector: 'app-admin-register-user-view',
   templateUrl: './admin-register-user-view.component.html',
   styleUrls: ['./admin-register-user-view.component.css'],
   providers: [UserService, GroupService]
 })
-export class AdminRegisterUserViewComponent implements OnInit {
+export class AdminRegisterUserViewComponent implements OnInit, AfterContentInit {
   private users: User[];
-  private groups: Group[];
-  private submitted: boolean;
-  private registrationError: boolean;
+  groups: Group[];
 
-  registerUserForm: FormGroup;
+  form: FormGroup;
+  loading = false;
+  submitted = false;
+  error = '';
 
   // A létrehozandó felhasználóhoz tartozó alapvető adatok
   user: User = {
@@ -33,11 +35,11 @@ export class AdminRegisterUserViewComponent implements OnInit {
     password: '',
     userName: '',
     realName: '',
-    role: '',
+    role: null,
     birthDate: null,
     email: '',
     nationality: '',
-    gender: '',
+    male: true,
     avatar: '',
     classModel: null,
   };
@@ -83,16 +85,50 @@ export class AdminRegisterUserViewComponent implements OnInit {
     private router: Router,
 
     private formBuilder: FormBuilder,
-    private renderer: Renderer,
+    private renderer: Renderer2,
 
     private authService: AuthService,
     private userService: UserService,
     private groupService: GroupService,
-  ) { }
+  ) {
+    this.form = new FormGroup({
+      'realname': new FormControl('', [Validators.required, Validators.minLength(2),
+        Validators.maxLength(255)]),
+      'birthdate': new FormControl('', [Validators.required]),
+      'male': new FormControl(true, [Validators.required]),
+      'nationality': new FormControl('magyar', [Validators.required]),
 
-  ngOnInit() {
-    this.update();
-    this.buildForm();
+      'email': new FormControl('', [Validators.required, Validators.pattern('^[a-z0-9!#$%&\'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$')]),
+      'username': new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(255), Validators.pattern('^[a-zA-Z0-9_]+$')]),
+      'password': new FormControl('', [Validators.required, Validators.minLength(4)]),
+
+      'group': new FormControl('', [Validators.required]),
+      'role': new FormControl('', [Validators.required]),
+    });
+  }
+
+  async ngOnInit() {
+    await this.getData();
+  }
+
+  private async getData() {
+    this.groups = await this.groupService.getGroups();
+    this.users = await this.userService.findAll();
+    setTimeout(this.initSelects, 500);
+  }
+
+  private initDateTime() {
+    let elems = document.querySelectorAll('.datepicker');
+    M.Datepicker.init(elems);
+  }
+
+  private initSelects() {
+    var elems = document.querySelectorAll('select');
+    M.FormSelect.init(elems);
+  }
+
+  ngAfterContentInit() {
+    this.initDateTime();
   }
 
   // Eltünteti az ékezeteket, szóközöket, stb
@@ -108,140 +144,50 @@ export class AdminRegisterUserViewComponent implements OnInit {
     }
   }*/
 
-  private checkUserNameExists(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } => {
-      const val = control.value;
-      if (this.users === undefined) return null;
-      return (this.users.filter((user) => user.userName === control.value).length > 0) ?  { alreadyExist: true } : null;
-    }
+  reset() { this.form.reset(); }
+
+  get fc() { return this.form.controls; }
+
+  private randomAvatar(male: boolean) {
+    let manAvatars = ['boy.png', 'man.png', 'man_beard.png', 'man_beard_glass.png'];
+    let womanAvatars = ['girl.png', 'girl_2.png'];
+    return
+      male
+        ? manAvatars[Math.floor(Math.random() * manAvatars.length)]
+        : womanAvatars[Math.floor(Math.random() * womanAvatars.length)];
   }
 
-  private update(): void {
-    // Csoportok
-    this.groupService.getGroups().subscribe((groups) => {
-      this.groups = groups as Group[];
-    });
-    // Felhasználók
-    this.userService.getUsers().subscribe((users) => {
-      this.users = users as User[];
-    });
-  }
-
-  clear() {
-    this.registerUserForm.reset();
-  }
-
-  onSubmit() {
-    if (!this.registerUserForm.valid) {
-      return;
-    }
-
+  async onSubmit() {
     this.submitted = true;
+    if (!this.form.valid) return;
+    this.loading = true;
 
-    // A felhasználó objektum feltöltése a form-ból kapott adatokkal
-    this.user = Object.assign({}, this.registerUserForm.value);
+    let user: any;
+
+    user.realName = this.fc.realname.value;
+    user.birthDate = new Date(this.fc.birthdate.value);
+
+    console.log(user)
 
     // Ki kell olvasni a kiválasztott osztály nevét, majd ahhoz hozzárendelni a felhasználót
-    const selectedGroup = <FormArray>this.registerUserForm.get('group');
+    /*const selectedGroup = <FormArray>this.registerUserForm.get('group');
     console.log(selectedGroup);
     for (let group of this.groups) {
       if (group.name == selectedGroup.value) {
         this.user.classModel = group;
         break;
       }
-    }
-
-    // Mivel avatar választó még nincs, így egy random avatart kap
-    let manAvatars = ['boy.png', 'man.png', 'man_beard.png', 'man_beard_glass.png'];
-    let womanAvatars = ['girl.png', 'girl_2.png']
-    if (this.user.gender === 'Férfi') {
-      this.user.avatar = manAvatars[Math.floor(Math.random() * manAvatars.length)];
-    } else {
-      this.user.avatar = womanAvatars[Math.floor(Math.random() * womanAvatars.length)];
-    }
+    }*/
 
     // A tényleges regisztráció kérése a backend-től
-    this.userService.registerUser(this.user).subscribe((user) => {
+    /*this.userService.create(this.user).then((user) => {
         //console.log('Regisztrálva');
         this.clear();
         this.router.navigate(['/admin/register-user/success']);
       }, (err) => {
         this.registrationError = true;
       }
-    );
+    );*/
   }
-
-  buildForm() {
-    this.registerUserForm = this.formBuilder.group({
-
-      // Személyes adatok
-      realName: [
-        this.user.realName,
-        Validators.compose([
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(255),
-        ]),
-      ],
-
-      birthDate: [this.user.birthDate, Validators.required],
-
-      gender: [this.user.gender],
-
-      nationality: [this.user.nationality, Validators.required],
-
-      email: [
-        this.user.email,
-        Validators.compose([
-          Validators.required,
-          Validators.pattern('^[a-z0-9!#$%&\'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$'),
-        ]),
-      ],
-
-      // Felhasználói fiók adatai
-      userName: [
-        this.user.userName,
-        Validators.compose([
-          Validators.required,
-          this.checkUserNameExists(),
-          Validators.minLength(2),
-          Validators.maxLength(255),
-          Validators.pattern('^[a-zA-Z0-9_]+$'),
-        ]),
-      ],
-
-      password: [this.user.password, Validators.compose([
-          Validators.required,
-          Validators.minLength(4),
-        ]),
-      ],
-
-      group: [this.user.classModel],
-
-      role: [this.user.role],
-    });
-  }
-
-  // A datepicker beállítása magyarra
-  // Beállítási lehetőségek: http://amsul.ca/pickadate.js/date/#options
-  public birthdayDatepickerOptions: Pickadate.DateOptions = {
-    monthsFull: [ 'január', 'február', 'március', 'április', 'május', 'június', 'július', 'augusztus', 'szeptember', 'október', 'november', 'december' ],
-    monthsShort: [ 'jan', 'febr', 'márc', 'ápr', 'máj', 'jún', 'júl', 'aug', 'szept', 'okt', 'nov', 'dec' ],
-    weekdaysFull: [ 'vasárnap', 'hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat' ],
-    weekdaysShort: [ 'V', 'H', 'K', 'SZe', 'CS', 'P', 'SZo' ],
-    today: 'Ma',
-    clear: 'Törlés',
-    firstDay: 1,
-    format: 'yyyy. mmmm dd.',
-    //formatSubmit: 'yyyy/mm/dd',
-    formatSubmit: 'yyyy-mm-dd',
-    close: 'Rendben',
-    closeOnClear: true,
-    closeOnSelect: false,
-    editable: false,
-    max: new Date('2011-12-31'), // valami hihető dátum egy diáknak
-    selectMonths: true,
-    selectYears: 18,
-  };
 
 }

@@ -1,41 +1,49 @@
+// Angular
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
-import { User } from '../models/user';
-import { Subject } from '../models/subject';
-import { Mark } from '../models/mark';
+// App
+import { User } from '@app/models/user';
+import { Subject } from '@app/models/subject';
+import { HttpService } from '@app/services/http.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UserService {
-  private static api: string = 'http://localhost:8080/api/users';
-  private handleError;
-  
-  constructor(
-    private http: HttpClient
-  ) { }
+  private baseUrl = 'http://localhost:8080/api/users';
 
-  public getUsers(): Observable<User[]> {
-    return this.http.get(UserService.api) as Observable<User[]>;
+  constructor(private httpService: HttpService) { }
+
+  public getCurrentUser(): Promise<User> {
+    return this.httpService.get(`${this.baseUrl}/current`);
   }
 
-  public getUser(id: number): Observable<User> {
-    return this.http.get(UserService.api + '/' + id) as Observable<User>;
+  public findAll(): Promise<User[]> {
+    return this.httpService.get(`${this.baseUrl}`);
   }
 
-  public getUserByUserName(username: string): Observable<User> {
-    return this.http.get(UserService.api + '/' + username) as Observable<User>;
+  public findById(userId: number): Promise<User> {
+    return this.httpService.get(`${this.baseUrl}/${userId}`);
   }
 
-  public delUserById(id: number): Observable<any> {
-    return this.http.delete(UserService.api + '/' + id);
+  public getSubjects(userId: number): Promise<Subject[]> {
+    return this.httpService.get(`${this.baseUrl}/${userId}/subjects`);
   }
 
-  public registerUser(user: User): Observable<User> {
-    return this.http.post(UserService.api + '/', user) as Observable<User>;
+  public create(user: User): Promise<User> {
+    try {
+      return this.httpService.post(`${this.baseUrl}`, user);
+    } catch (e) {
+      console.log('[create] ' + e);
+    }
   }
 
-  public getSubjectsByUser(id: number): Observable<Subject[]> {
-    return this.http.get(UserService.api + '/' + id + '/subjects') as Observable<Subject[]>;
+  public delete(userId: number): Promise<User> {
+    try {
+      return this.httpService.delete(`${this.baseUrl}/${userId}`);
+    } catch (e) {
+      console.log('[delete] ' + e);
+    }
   }
+
 }

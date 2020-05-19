@@ -1,20 +1,20 @@
+<div *ngIf="loading" class="progress">
+  <div class="indeterminate"></div>
+</div>
 <div class="container">
+
     <h3 class="center">Osztály hozzáadása</h3>
     <br>
-    <form [formGroup]="addClassForm" (ngSubmit)="onSubmit()" novalidate>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="section">
-
-          <mz-input-container class="col s12 m6">
-              <input mz-input mz-validation required
-              id="input-class-name"
-              formControlName="name"
-              type="text"
-              [errorMessageResource]="errorMessageResources.name"
-              [label]="'Osztály neve'"/>
-          </mz-input-container>
-
-          <button mz-button [disabled]="!addClassForm.valid" type="submit">Hozzáadás</button>
+        <div class="col s12 m6">
+          <input id="classname" formControlName="classname" type="text" placeholder="Osztály neve" required>
+          <label for="classname">Osztály neve</label>
+        </div>
+        <br>
+        <div class="center-align">
+          <button class="blue btn" [ngClass]="{ disabled: !form.valid }" type="submit">Hozzáadás</button>
+        </div>
       </div>
     </form>
   </div>
-  

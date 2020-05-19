@@ -1,0 +1,84 @@
+<div class="container">
+  <h3 class="center">Osztályzatok rögzítése</h3>
+  <br>
+  <form id="add-mark-form" [formGroup]="addMarkForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="section">
+
+      <div class="row">
+        <div class="col s12 m6">
+          <h4>Csoport</h4>
+          <select class="browser-default" id="group" formControlName="group" placeholder="'Válasszon csoportot!'" (change)="reloadStudents()" required>
+            <option *ngFor="let group of groups; let i = index" [value]="group.id">{{ group.name }}</option>
+          </select>
+          <label for="group">Csoport</label>
+        </div>
+
+        <div class="col s12 m6">
+          <h4>Tantárgy</h4>
+          <select class="browser-default" id="subject" formControlName="subject" placeholder="'Válasszon tantárgyat!'" required>
+            <option *ngFor="let subject of subjects; let i = index" value="{{ subject.id }}">{{ subject.name }}</option>
+          </select>
+          <label for="group">Tantárgy</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12 m6">
+          <h4>Leírás</h4>
+          <input id="input-description" formControlName="description" type="text" placeholder="'pl. felelés, témazáró'" required>
+          <label for="input-description">Leírás</label>
+        </div>
+
+        <div class="col s12 m6">
+          <h4>Datálás</h4>
+          <input class="datepicker no-autoinit" id="datepicker-date" formControlName="date" type="text" placeholder="Dátum">
+          <label for="datepicker-date">Datálás</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h4>Tanulók</h4>
+      <p *ngIf="!addMarkForm.value.group">Még nincs kiválaszva csoport!</p>
+
+      <div class="row" formArrayName="studentsFormArray"
+        *ngFor="let studentForm of addMarkForm.get('studentsFormArray')['controls']; let i = index;">
+        <div [formGroupName]="i">
+          <div class="col s6">
+            <input id="student-id-{{i}}" formControlName="studentId" type="number" hidden>
+            <input id="student-name-{{i}}" formControlName="studentName" type="text" [attr.disabled]="true">
+            <label for="student-name-{{i}}">Név</label>
+          </div>
+          <div class="col s6">
+            <select class="browser-default" id="student-mark-{{i}}" formControlName="mark">
+              <option selected="selected" value="-1">Tanuló kihagyása</option>
+              <option *ngFor="let markOption of markOptions; let j = index" value="{{ markOption }}">{{ markOptionsText[j] }} ({{ markOption }})</option>
+            </select>
+            <label for="student-mark-{{i}}">Osztályzat</label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="center">
+      <div *ngIf="submitted" class="preloader-wrapper big active">
+        <div class="spinner-layer spinner-blue-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div><div class="gap-patch">
+            <div class="circle"></div>
+          </div><div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="blue btn" [disabled]="!addMarkForm.valid" type="submit">
+        Osztályzatok rögzítése
+      </button>
+      &#8203;
+      <button class="blue btn" (click)="clear()" type="button">Alaphelyzet</button>
+    </div>
+  </form>
+</div>

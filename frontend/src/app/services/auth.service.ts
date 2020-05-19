@@ -1,50 +1,111 @@
+// Angular
 import { Injectable } from '@angular/core';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { User } from '../models/user';
+// App
+import { User, Role } from '@app/models/user';
 
-@Injectable()
-export class AuthService {
-  private static api: string = 'http://localhost:8080/api/auth';
-  public static user: User;
+import { HttpService } from '@app/services/http.service';
+import { UserService } from '@app/services/user.service';
 
+export class AuthResponse {
   constructor(
-    private http: HttpClient
+    public token: string,
+    public user: User,
   ) { }
+}
 
-  public logout(): void {    
-    this.http.get(AuthService.api + '/logout').subscribe(() => {
-      this.setUser(undefined);
-    });
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private currentUserSubject: BehaviorSubject<User>;
+  public currentUser: Observable<User>;
+
+  constructor(private http: HttpClient, private userService: UserService) {
+    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  public login(username: string, password: string): Observable<User> {
-    let tempUser: User = new User(-1, username, '', 'ROLE_GUEST');
-    tempUser.password = password;
-    return this.http.post(AuthService.api + '/login', tempUser) as Observable<User>;
-  }
-
-  public setUser(user: User) {
-    AuthService.user = user;
+  authenticate(emailAddress: string, password: string) {
+    return this.http.post<any>(`http://localhost:8080/api/authenticate`, { emailAddress, password })
+      .pipe(map((authResponse: AuthResponse) => {
+        let user = authResponse.user;
+        let token = authResponse.token;
+        user.token = token;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.currentUserSubject.next(user);
+        return user;
+      }));
   }
 
   public getUser(): User {
-    return AuthService.user;
+    return this.currentUserSubject.value;
   }
 
-  public syncLoginStatus(): void {
-    this.http.get(AuthService.api + '/user').subscribe((user: User) => {
-      if (user) {
-        this.setUser(user);
-      }
-    });
+  async syncCurrentUser() {
+    this.currentUserSubject.next(await this.userService.getCurrentUser());
   }
 
-  public hasRole(role) {
-    if (!this.getUser()) {
-      return false;
+  public loggedIn(): boolean {
+    let user = this.getUser();
+    return !(user === null);
+  }
+
+  logout() {
+    localStorage.removeItem('currentUser');
+    this.currentUserSubject.next(null);
+  }
+
+  public getCurrentUserEmail(): string {
+    return this.getUser().email;
+  }
+
+  public getCurrentUserRole(): Role {
+    let currentUser = this.getUser();
+    if (currentUser === null) {
+      return null;
     }
-    return this.getUser().role == role;
+    return currentUser.role;
+  }
+
+  public isStudent(): boolean {
+    return this.getCurrentUserRole() === Role.ROLE_STUDENT;
+  }
+
+  public isTeacher(): boolean {
+    return this.getCurrentUserRole() === Role.ROLE_TEACHER;
+  }
+
+  public isAdmin(): boolean {
+    return this.getCurrentUserRole() === Role.ROLE_ADMIN;
+  }
+
+  private getCurrentUserID = (): number => {
+    return this.getUser().id;
+  }
+
+  public getDefaultRoute(): string {
+    let currentUser = this.getUser();
+    if (currentUser === null) {
+      return '/';
+    }
+    let role = currentUser.role;
+    switch (role) {
+      case null:
+      case undefined:
+        return '/';
+      case 'ROLE_STUDENT': {
+        return '/student/subjects';
+      }
+      case 'ROLE_TEACHER': {
+        return '/teacher-panel';
+      }
+      case 'ROLE_ADMIN': {
+        return '/admin-panel';
+      }
+    }
   }
 }
