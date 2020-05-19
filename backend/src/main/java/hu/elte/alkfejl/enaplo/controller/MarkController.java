@@ -17,6 +17,12 @@ public class MarkController {
     @Autowired private UserRepository userRepository;
     @Autowired private MarkRepository markRepository;
 
+    @PostMapping("")
+    public ResponseEntity<MarkModel> post(@RequestBody MarkModel mark) {
+        MarkModel saved = markRepository.save(mark);
+        return ResponseEntity.ok(saved);
+    }
+
     @PatchMapping("/{markId}")
     @PreAuthorize("hasAuthority('ROLE_TEACHER') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<MarkModel> patchMark(@PathVariable Integer markId, @RequestBody MarkModel mark) {
