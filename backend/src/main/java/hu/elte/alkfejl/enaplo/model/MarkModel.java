@@ -15,7 +15,7 @@ import java.util.Date;
 @Table(name = "enaplo_marks")
 public class MarkModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne

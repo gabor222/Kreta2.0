@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "enaplo_classes")
 public class ClassModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false, unique = true)

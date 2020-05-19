@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "enaplo_users")
 public class UserModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String userName;

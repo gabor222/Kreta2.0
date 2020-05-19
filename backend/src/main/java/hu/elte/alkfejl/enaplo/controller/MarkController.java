@@ -5,7 +5,7 @@ import hu.elte.alkfejl.enaplo.repository.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -13,18 +13,13 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/marks")
 public class MarkController {
-    @Autowired
-    private GroupRepository groupRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private MarkRepository markRepository;
+    @Autowired private GroupRepository groupRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private MarkRepository markRepository;
 
     @PatchMapping("/{markId}")
-    @Secured({ "ROLE_TEACHER", "ROLE_ADMIN" })
-    public ResponseEntity<MarkModel> pathMark(@PathVariable Integer markId, @RequestBody MarkModel mark) {
+    @PreAuthorize("hasAuthority('ROLE_TEACHER') or hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<MarkModel> patchMark(@PathVariable Integer markId, @RequestBody MarkModel mark) {
         Optional<MarkModel> optionalMark = markRepository.findById(markId);
         if (optionalMark.isPresent()) {
             MarkModel modifiableMark = optionalMark.get();

@@ -5,7 +5,7 @@ import hu.elte.alkfejl.enaplo.repository.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -14,14 +14,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/subjects")
 public class SubjectController {
-    @Autowired
-    private SubjectRepository subjectRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private MarkRepository markRepository;
+    @Autowired private SubjectRepository subjectRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private MarkRepository markRepository;
 
     @GetMapping("")
     public ResponseEntity<Iterable<SubjectModel>> findAllSubjects() {
@@ -39,14 +34,14 @@ public class SubjectController {
     }
 
     @PostMapping("")
-    @Secured({ "ROLE_ADMIN" })
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<SubjectModel> addSubject(@RequestBody SubjectModel subject) {
         SubjectModel saved = subjectRepository.save(subject);
         return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/{subjectId}")
-    @Secured({ "ROLE_ADMIN" })
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<SubjectModel> updateSubject(@PathVariable Integer subjectId, @RequestBody SubjectModel subject) {
         Optional<SubjectModel> optionalSubject = subjectRepository.findById(subjectId);
         if (optionalSubject.isPresent()) {
@@ -59,7 +54,7 @@ public class SubjectController {
     }
 
     @DeleteMapping("/{subjectId}")
-    @Secured({ "ROLE_ADMIN" })
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity deleteSubject(@PathVariable Integer subjectId) {
         Optional<SubjectModel> optional = subjectRepository.findById(subjectId);
         if (optional.isPresent()) {
@@ -71,9 +66,8 @@ public class SubjectController {
     }
 
     // Osztályzatok
-
     @GetMapping("/{subjectId}/marks/{markId}")
-    @Secured({ "ROLE_STUDENT", "ROLE_TEACHER" })
+    @PreAuthorize("hasAuthority('ROLE_STUDENT') or hasAuthority('ROLE_TEACHER')")
     public ResponseEntity<MarkModel> getMark(@PathVariable Integer subjectId, @PathVariable Integer markId) {
         Optional<SubjectModel> optionalSubject = subjectRepository.findById(subjectId);
         Optional<MarkModel> optionalMark = markRepository.findById(markId);
@@ -84,7 +78,7 @@ public class SubjectController {
     }
 
     @GetMapping("/{subjectId}/marks/{userId}")
-    @Secured({ "ROLE_STUDENT", "ROLE_TEACHER" })
+    @PreAuthorize("hasAuthority('ROLE_STUDENT') or hasAuthority('ROLE_TEACHER')")
     public ResponseEntity getStudentMarks(@PathVariable Integer subjectId, @PathVariable Integer userId) {
         Optional<SubjectModel> optionalSubject = subjectRepository.findById(subjectId);
         Optional<UserModel> optionalUser = userRepository.findById(userId);
@@ -100,7 +94,7 @@ public class SubjectController {
     }
 
     @PostMapping("/{subjectId}/marks")
-    @Secured({ "ROLE_TEACHER" })
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     public ResponseEntity<MarkModel> addMark(@PathVariable Integer subjectId, @RequestBody MarkModel mark) {
         Optional<SubjectModel> optionalSubject = subjectRepository.findById(subjectId);
         if (optionalSubject.isPresent()) {
@@ -112,7 +106,7 @@ public class SubjectController {
     }
 
     @DeleteMapping("/{subjectId}/marks/{markId}")
-    @Secured({ "ROLE_TEACHER" })
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     public ResponseEntity<MarkModel> deleteMark(@PathVariable Integer subjectId, @PathVariable Integer markId) {
         Optional<SubjectModel> optionalSubject = subjectRepository.findById(subjectId);
         Optional<MarkModel> optionalMark = markRepository.findById(markId);

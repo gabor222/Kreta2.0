@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "enaplo_subjects")
 public class SubjectModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToMany(mappedBy = "subjects")
