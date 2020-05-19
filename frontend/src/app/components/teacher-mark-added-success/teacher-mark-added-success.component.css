@@ -1,0 +1,9 @@
+#add-mark-success-wrapper {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#add-mark-success-inner {
+    width: 100%;
+}

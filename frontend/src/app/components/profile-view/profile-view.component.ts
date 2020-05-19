@@ -14,7 +14,7 @@ import { UserService } from '../../services/user.service';
   providers: [UserService, DatePipe]
 })
 export class ProfileViewComponent implements OnInit {
-  private user: User;
+  user: User;
 
   constructor(
     private route: ActivatedRoute,

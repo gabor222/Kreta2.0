@@ -3,20 +3,28 @@
     <h6 class="center">Az Ön összesített tanulmányi átlaga: {{ getTotalAverage() == 0 ? 'Számítás...' : getTotalAverage() }}</h6>
     <br>
     <!-- Jelezzük az adatok betöltését -->
-    <div *ngIf="!subjects" class="center">
-      <mz-spinner
-        [color]="'blue'"
-        [size]="'big'">
-      </mz-spinner>
+    <div *ngIf="subjects?.length < 1" class="center-align">
+      <div class="preloader-wrapper big active">
+        <div class="spinner-layer spinner-blue-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div><div class="gap-patch">
+            <div class="circle"></div>
+          </div><div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <mz-collapsible *ngIf="subjects">
-      <mz-collapsible-item *ngFor="let subject of subjects; let i = index">
-        <mz-collapsible-item-header>
+
+    <ul *ngIf="subjects?.length > 0" class="collapsible">
+      <li *ngFor="let subject of subjects; let i = index">
+        <div class="collapsible-header">
           <i class="material-icons">{{ subject.icon }}</i>
           <span>{{ subject.name }}</span>
-          <div class="right"><mz-badge [value]="subject.average" [caption]="'átlag'" [badgeClass]="'blue'" [new]="true"></mz-badge></div>
-        </mz-collapsible-item-header>
-        <mz-collapsible-item-body>
+          <span class="badge">Átlag: {{ subject.average }}</span>
+        </div>
+        <div class="collapsible-body">
           <table class="striped centered">
             <thead>
               <tr>
@@ -35,7 +43,8 @@
               </tr>
             </tbody>
           </table>
-        </mz-collapsible-item-body>
-      </mz-collapsible-item>
-    </mz-collapsible>
+        </div>
+      </li>
+    </ul>
+
   </div>

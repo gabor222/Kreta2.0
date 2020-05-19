@@ -1,86 +1,87 @@
-<mz-navbar *ngIf="loggedIn()" navbarClass="indigo darken-3">
-  <!-- Mobil eszközökön megjelenő hamburgermenü -->
-  <mz-navbar-item-container class="hide-on-med-and-up">
-    <mz-navbar-item id="open-sidenav">
-      <a><i class="material-icons">menu</i></a>
-    </mz-navbar-item>
-  </mz-navbar-item-container>
-  
-  <mz-navbar-item-container class="hide-on-small-only">
-    <mz-navbar-item [active]="router.isActive('/profile')">
-      <a routerLink="profile"><i class="material-icons left">person</i> Profil</a>
-    </mz-navbar-item>
-  </mz-navbar-item-container>
-  
-  <!-- Diák menü -->
-  <mz-navbar-item-container *ngIf="isStudent()" class="hide-on-small-only">
-    <mz-navbar-item [active]="router.isActive('/student/subjects')">
-      <a routerLink="student/subjects"><i class="material-icons left">format_list_bulleted</i> Tantárgyak</a>
-    </mz-navbar-item>
-  </mz-navbar-item-container>
+<nav *ngIf="authService.loggedIn()" class="indigo darken-3">
+  <div class="nav-wrapper">
+    <a routerLink="/" class="brand-logo">Kréta2</a>
+    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <ul class="right hide-on-med-and-down">
+      <!-- Alap menü -->
+      <li [ngClass]="{ 'active': isLinkActive('/profile') }"><a routerLink="profile">
+        <i class="material-icons left">person</i> Profil</a>
+      </li>
 
-  <!-- Tanár menü -->
-  <mz-navbar-item-container *ngIf="isTeacher()" class="hide-on-small-only">
-    
-  </mz-navbar-item-container>
+      <!-- Diák menü -->
+      <li *ngIf="authService.isStudent()" [ngClass]="{ 'active': isLinkActive('/student/subjects') }">
+        <a routerLink="student/subjects"><i class="material-icons left">format_list_bulleted</i> Tantárgyak</a>
+      </li>
 
-  <!-- Admin menü -->
-  <mz-navbar-item-container *ngIf="isAdmin()" class="hide-on-small-only">
-    <mz-navbar-item [active]="router.isActive('admin-panel')">
-      <a routerLink="admin-panel"><i class="material-icons left">build</i> Admin panel</a>
-    </mz-navbar-item>
-    <mz-navbar-item [active]="router.isActive('/admin/register-user')">
-      <a routerLink="admin/register-user"><i class="material-icons left">person_add</i> Felhasználó regisztrálása</a>
-    </mz-navbar-item>
-  </mz-navbar-item-container>
-  
-  <!-- Kijelentkezés -->
-  <mz-navbar-item-container class="hide-on-small-only" [align]="'right'">
-    <mz-navbar-item>
-      <a><button (click)="logout()" class="btn blue darken-3 waves-effect waves-light">Kijelentkezés <i class="material-icons right">directions_walk</i></button></a>
-    </mz-navbar-item>
-  </mz-navbar-item-container>
-</mz-navbar>
+      <!-- Tanár menü -->
+      <li *ngIf="authService.isTeacher()" [ngClass]="{ 'active': isLinkActive('/teacher-panel') }">
+        <a routerLink="teacher-panel"><i class="material-icons left">build</i> Tanári panel</a>
+      </li>
+      <li *ngIf="authService.isTeacher()" [ngClass]="{ 'active': isLinkActive('/teacher/add-marks') }">
+        <a routerLink="teacher/add-marks"><i class="material-icons left">add_circle</i> Osztályzatok rögzítése</a>
+      </li>
 
-<!-- Oldalsó navigáció -->
-<mz-sidenav *ngIf="loggedIn()" [id]="'sidenav'" [collapseButtonId]="'open-sidenav'">
-  <mz-sidenav-header>
-    <div id="sidenav-title" class="center">
-      &#8203;
+      <!-- Admin menü -->
+      <li *ngIf="authService.isAdmin()" [ngClass]="{ 'active': isLinkActive('/admin-panel') }">
+        <a routerLink="admin-panel"><i class="material-icons left">build</i> Admin panel</a>
+      </li>
+      <li *ngIf="authService.isAdmin()" [ngClass]="{ 'active': isLinkActive('/admin/register-user') }">
+        <a routerLink="admin/register-user"><i class="material-icons left">person_add</i> Felhasználó regisztrálása</a>
+      </li>
+
+      <!-- Kijelentkezés -->
+      <li>
+        <a (click)="logout()"><i class="material-icons left">directions_walk</i> Kijelentkezés</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<ul *ngIf="authService.loggedIn()" class="sidenav" id="mobile-demo">
+  <li>
+    <div class="user-view">
+      <div class="background">
+        <img class="responsive-img" src="/assets/static/images/sidenav-header.jpg">
+      </div>
+      <a routerLink="/profile"><img class="circle" src="/assets/static/images/avatars/{{ authService.getUser().avatar }}"></a>
+      <a routerLink="/profile"><span class="white-text name">{{ authService.getUser().realName }}</span></a>
+      <a routerLink="/profile"><span class="white-text email">{{ authService.getUser().email }}</span></a>
     </div>
-    <p class="center">Belépve, mint {{ getUserRealName() }}</p>
-  </mz-sidenav-header>
+  </li>
 
-  <mz-sidenav-divider></mz-sidenav-divider>
-
-  <mz-sidenav-link [active]="router.isActive('/profile')">
+  <li [ngClass]="{ 'active': isLinkActive('/profile') }">
     <a routerLink="profile"><i class="material-icons left">person</i> Profil</a>
-  </mz-sidenav-link>
+  </li>
+
+  <li><div class="divider"></div></li>
 
   <!-- Diák menü -->
-  <div *ngIf="isStudent()">
-    <mz-sidenav-link [active]="router.isActive('/student/subjects')">
-      <a routerLink="student/subjects"><i class="material-icons left">format_list_bulleted</i> Tantárgyak</a>
-    </mz-sidenav-link>
-  </div>
+  <li *ngIf="authService.isStudent()" [ngClass]="{ 'active': isLinkActive('/student/subjects') }">
+    <a routerLink="student/subjects"><i class="material-icons left">format_list_bulleted</i> Tantárgyak</a>
+  </li>
 
   <!-- Tanár menü -->
-  <div *ngIf="isTeacher()">
-    
-  </div>
+  <li *ngIf="authService.isTeacher()" [ngClass]="{ 'active': isLinkActive('/teacher-panel') }">
+    <a routerLink="teacher-panel"><i class="material-icons left">build</i> Tanári panel</a>
+  </li>
+  <li *ngIf="authService.isTeacher()" [ngClass]="{ 'active': isLinkActive('/teacher/add-marks') }">
+    <a routerLink="teacher/add-marks"><i class="material-icons left">add_circle</i> Osztályzatok rögzítése</a>
+  </li>
 
   <!-- Admin menü -->
-  <div *ngIf="isAdmin()">
-    <mz-sidenav-link [active]="router.isActive('/admin/register-user')">
-      <a routerLink="admin/register-user"><i class="material-icons left">person_add</i> Felhasználó regisztrálása</a>
-    </mz-sidenav-link>
-  </div>
+  <li *ngIf="authService.isAdmin()" [ngClass]="{ 'active': isLinkActive('/admin-panel') }">
+    <a routerLink="admin-panel"><i class="material-icons left">build</i> Admin panel</a>
+  </li>
+  <li *ngIf="authService.isAdmin()" [ngClass]="{ 'active': isLinkActive('/admin/register-user') }">
+    <a routerLink="admin/register-user"><i class="material-icons left">person_add</i> Felhasználó regisztrálása</a>
+  </li>
 
-  <mz-sidenav-divider></mz-sidenav-divider>
+  <li><div class="divider"></div></li>
 
-  <mz-sidenav-link class="center">
-    <button (click)="logout()" class="btn blue darken-3 waves-effect waves-light">Kijelentkezés <i class="material-icons right">directions_walk</i></button>
-  </mz-sidenav-link>
-</mz-sidenav>
+  <!-- Kijelentkezés -->
+  <li>
+    <a (click)="logout()"><i class="material-icons left">directions_walk</i> Kijelentkezés</a>
+  </li>
+</ul>
 
 <router-outlet></router-outlet>

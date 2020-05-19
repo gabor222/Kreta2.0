@@ -24,8 +24,8 @@ export class StartPageViewComponent implements OnInit {
   }
 
   private navigateToRoleStartPage(): void {
-    let user: User = this.authService.getUser();
-    if (user !== undefined) {
+    if (this.authService.loggedIn()) {
+      let user: User = this.authService.getUser();
       let role = user.role;
       switch (role) { // alapértelmezett kezdőoldalak a különböző szerepköröknek
         case 'ROLE_STUDENT': {
@@ -33,7 +33,7 @@ export class StartPageViewComponent implements OnInit {
           break;
         }
         case 'ROLE_TEACHER': {
-          this.router.navigate(['/student/subjects']);
+          this.router.navigate(['/teacher-panel']);
           break;
         }
         case 'ROLE_ADMIN': {

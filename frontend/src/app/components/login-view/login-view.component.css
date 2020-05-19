@@ -26,15 +26,7 @@
 
 .login-panel {
   position: relative;
-  height: 50%;
-  min-height: 500px;
-  margin-top: 15px;
-  border-radius: 15px;
-}
-
-.input_div{
-	max-width: 40%;
-	margin: auto;
+  height: 100%;
 }
 
 label,input { color: #fff; }
@@ -49,5 +41,3 @@ label,input { color: #fff; }
 hr { max-width: 75%; }
 
 .icon-block .material-icons { font-size: inherit; }
-
-@media (max-width:600px) { .login-panel {margin-top: 0px;} }

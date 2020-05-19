@@ -1,25 +1,33 @@
+// Angular
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
-import { Group } from '../models/group';
+// App
+import { User } from '@app/models/user';
+import { Group } from '@app/models/group';
+import { HttpService } from '@app/services/http.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class GroupService {
-  private static api: string = 'http://localhost:8080/api/groups';
-  private handleError;
-  
-  constructor(
-    private http: HttpClient
-  ) { }
+  private baseUrl = 'http://localhost:8080/api/groups';
 
-  public getGroups(): Observable<Group[]> {
-    return this.http.get(GroupService.api) as Observable<Group[]>;
+  constructor(private httpService: HttpService) { }
+
+  public getGroups(): Promise<Group[]> {
+    return this.httpService.get(`${this.baseUrl}`);
   }
 
-  public addGroup(group: Group): Observable<Group> {
-    return this.http.post(GroupService.api + '/', group) as Observable<Group>;
+  public addGroup(group: Group): Promise<Group> {
+    try {
+      return this.httpService.post(`${this.baseUrl}`, group);
+    } catch (e) {
+      console.log('[addGroup] ' + e);
+    }
   }
 
-  // További funkciók
+  public getUsers(groupId: number): Promise<User[]> {
+    return this.httpService.get(`${this.baseUrl}/${groupId}/students`);
+  }
+
 }
